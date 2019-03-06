@@ -8,6 +8,7 @@
 - MARKETING : Add a boolean in targetModelSet
 - PRODUCT : If stockManaged is false , hide ( mrpFamily,productStockPanel,stockReportPanel,stockHistoryReportPanel,linksPanel )
 - SUPPL INVOICES : new buttons to validate payment
+- BULK UNIT COST CALCULATION : new way to compute all unit costs using BOM. Allow to compute cost using BOM level sequence. 
 
 ## Improvements
 - Marketing : Filter of selection list and allow to insert value without quotes in TargetList object.
