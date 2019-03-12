@@ -1,27 +1,49 @@
 # Changelog
 
-## [Unreleased 5.1.4]
+## [Unreleased 5.1.5]
 ## Features
+
+## Improvements
+
+## Bug Fixes
+- Configurator : Fix demo data
+- Employee : Fix issue on save of contact master detail.
+
+
+## [5.1.4] - 2019-03-11
+## Features
+- MARKETING CAMPAIGN : Manage guests and attendees
+- MARKETING CAMPAIGN : Send a reminder to invited targets
+- MARKETING CAMPAIGN : Add a boolean in targetModelSet to allow the editing of the targets
 - MARKETING : Manage guests and attendees
 - CAMPAIGN : Added a reminder tab
 - MARKETING : Send a reminder to invited targets
 - MARKETING : Add a boolean in targetModelSet
 - PRODUCT : If stockManaged is false , hide ( mrpFamily,productStockPanel,stockReportPanel,stockHistoryReportPanel,linksPanel )
 - SUPPL INVOICES : new buttons to validate payment
-- BULK UNIT COST CALCULATION : new way to compute all unit costs using BOM. Allow to compute cost using BOM level sequence. 
+- BULK UNIT COST CALCULATION : new way to compute all unit costs using BOM. Allow to compute cost using BOM level sequence.
 
 ## Improvements
 - Marketing : Filter of selection list and allow to insert value without quotes in TargetList object.
 - BUDGET : the budget line dates must be 'inside' the bugdet date and the lines can't 'share' dates
 - Marketing : added a panel-dashlet showing the generated emails in campaign.
-- WAITING MODEL : change error message From Waiting model: com.axelor.apps.hr.db.LeaveRequest to Please set the email template to send.
 - Studio: Dynamic fetching of records for relational fields
-- MANUF. ORDER : empty stockmoves with realizeBtn and finishPartBtn
 - CUSTOMER DELIVERY : editable deliveryCondition
 - CRM : Addition of 'freeText' boolean in LostReason and 'lostReasonStr' in lead and opportunity.
 - Sale Order: if config is activated, create stock move after modifications validation.
-- Improve Manuf order calculation rules (allow to select if we want take into account the WAP price or cost price for 
+- Improve Manuf order calculation rules (allow to select if we want take into account the WAP price or cost price for
 in progress manuf order and for bill of material, and add a prorata method for in progress manuf order calculation of cost sheet)
+- FixedAsset / FixedAssetLine : Translations on Few Fields Of fixed-asset-form form.
+- MANUF. ORDER : show error when no default email account
+- Stock Location: fill company on creating inventory
+- Change the page numbering on invoices and orders printing.
+- BANK STATEMENT : hide runImportBtn when status = "imported"
+- BillOfMaterial : make 'unit' required and notEditable field.
+- APP ACCOUNT : put Configuration panel before payer panel
+- SALES : translate availability requests in french
+- MANUF ORDER : open popup on cost sheet calculation
+- SALE ORDER : Removed amount display from title lines on print
+- CUST. DELIVERY : new tags "not invoiced" and "invoiced"
 
 ## Bug Fixes
 - StockMoveLine: Fix wrong price values in declaration of exchanges.
@@ -35,6 +57,25 @@ in progress manuf order and for bill of material, and add a prorata method for i
 - Partner Stock Settings: fix exception when there were no settings for a company.
 - Manuf Order: fix produced product quantities computation.
 - Fix NPE on finishing manuf order.
+- SaleOrder : Fixed error for action attrs to hide inAti field.
+- Timesheet :Fix lines generation error.
+- SALEORDER : birt report - product picture
+- Partner price list : Fix when select price lists and put them in a partner price list.
+- MOVELINE EXPORT : Fixed NPE that appears when we generate a FEC (journal entry file) and there is a moveLine without originDate.
+- INVOICE PRINTING : remove blank space that appear just behind the invoice lines and remove the line spacings in note. Improve page number alignment.
+- Purchase Order : Fix error display on product when fields in supplierCatalogList are empty.
+- MANUF ORDER : Cancel reason shouldn't be required for draft or planned manuf order
+- PRODPROCESS : reset version and status on copy
+- BILLOFMATERIAL : reset version and costsheet related info on copy
+- Production Process : Fix error at creation of workCenter with human type from ProdProcessLine.
+- ACCOUNTING MOVES : Fix error message display at the wrong time
+- ACCOUNTING MOVES : NPE clicking on autoTaxLineGenerateBtn
+- Exception: formatting error.
+- PRODUCT : If stockManaged is false , hide ( mrpFamily,productStockPanel,stockReportPanel,stockHistoryReportPanel,linksPanel )
+- Translation : Fix english translation of accounting export types.
+- WAITING MODEL : change error message From Waiting model: com.axelor.apps.hr.db.LeaveRequest to Please set the email template to send.
+- ACCOUTING CUTOFF : NPE when stock move not linked to a saleOrder or purchaseOrder
+
 
 ## [5.1.3] - 2019-02-21
 ## Features
@@ -723,8 +764,10 @@ Moreover, the amount_remaining calculation on move line was wrong. Now we comput
 - DataBackup : Handle Exception.
 - Purchase Order: remove save on loading purchase order form.
 
-[Unreleased 5.1.4]: https://github.com/axelor/axelor-business-suite/compare/v5.1.3...dev
+
+[5.1.4]: https://github.com/axelor/axelor-business-suite/compare/v5.1.3...v5.1.4
 [5.1.3]: https://github.com/axelor/axelor-business-suite/compare/v5.1.2...v5.1.3
 [5.1.2]: https://github.com/axelor/axelor-business-suite/compare/v5.1.1...v5.1.2
 [5.1.1]: https://github.com/axelor/axelor-business-suite/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/axelor/axelor-business-suite/compare/5.0...v5.1.0
+
