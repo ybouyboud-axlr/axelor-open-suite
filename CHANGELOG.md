@@ -2,13 +2,49 @@
 
 ## [Unreleased 5.1.5]
 ## Features
+- Sale Order Line: new option to keep requested qty equal to qty.
+- GANTT : Fixes for links start-start and end-end links
+- MRP : Add a status to MRP Forecasts
+- Studio: Set canEdit and canNew for relational fields from studio.
+- Sale Order: new button to modify reserved quantities in lines.
+- Bank Payment : Addition of two fields in BankReconciliation.
+- Stock Location Line: New buttons to allocate or deallocate every related stock move lines.
+- Supplychain Config: add an option to auto allocate reserved qty on other stock moves.
+- Sale Order Line: new button showing the future qty of the product.
 
 ## Improvements
-
+- Data config : rename field 'Fields'
+- Reserved qty: Add data checks in service and in view.
+- Sale Order Line: When being edited, editable when the amount is 0.
+- ManufOrder: Prevent the user from removing realized stock move lines.
+- ManufOrder: does not create empty stock moves.
+- ProdProcess : Change in description of phase view.
+- ManufOrder : Added new label 'Outsourced'
+- Production : Change title for durations.
+- INVOICE : Replaced static french word Acompte(s) lié(s) with translation
+- TASKS : Project planning time line autofill
+- ManufOrder : Hide isConsProOnOperation on manufacturing order when it is false on production process.
+- MANUFACTURING : Hide WORKSHOP menu based on Manfacturing app config.
+- Manuf Order : Forbid to plan a manuf order if the BoM and prodProcess are not applicable.
+- Bank Payment : Forbid to edit, delete and create new line in BankReconciliationLine grid-view from menu entry.
 ## Bug Fixes
 - Configurator : Fix demo data
 - Employee : Fix issue on save of contact master detail.
-
+- BankPayment : Change in slice of nextOrderId in EbicsUser.
+- MANUF. ORDER : display message when no default email account found to send email
+- STOCK MOVE : address printing issue
+- Debt Recovery Batch : NPE fixed
+- Ticket : remove pop-up onNew.
+- Product : set 'stockManaged' false when product is of type 'service'.
+- Account : Manage JPA cache for BatchRealizeFixedAssetLine.
+- Calendar : Synchronisation anomaly fixed.
+- Contract : better naming and translation (fr) for the buttons
+- HR : Fix employeeSet domain.
+- Add missing french translation.
+- Business Project : Link Project when invoice generate from sale order.
+- HR : Remove search from emailAddress from Employee.
+- Business Project : Hide sale order in report on conditon.
+- Stock Move: reservation date time is now readonly.
 
 ## [5.1.4] - 2019-03-11
 ## Features
@@ -75,7 +111,6 @@ in progress manuf order and for bill of material, and add a prorata method for i
 - Translation : Fix english translation of accounting export types.
 - WAITING MODEL : change error message From Waiting model: com.axelor.apps.hr.db.LeaveRequest to Please set the email template to send.
 - ACCOUTING CUTOFF : NPE when stock move not linked to a saleOrder or purchaseOrder
-
 
 ## [5.1.3] - 2019-02-21
 ## Features
