@@ -54,11 +54,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,13 +117,7 @@ public class PurchaseOrderStockServiceImpl implements PurchaseOrderStockService 
     Map<LocalDate, List<PurchaseOrderLine>> purchaseOrderLinePerDateMap =
         getAllPurchaseOrderLinePerDate(purchaseOrder);
 
-    for (LocalDate estimatedDeliveryDate :
-        purchaseOrderLinePerDateMap
-            .keySet()
-            .stream()
-            .filter(x -> x != null)
-            .sorted((x, y) -> x.compareTo(y))
-            .collect(Collectors.toList())) {
+    for (LocalDate estimatedDeliveryDate : purchaseOrderLinePerDateMap.keySet()) {
 
       List<PurchaseOrderLine> purchaseOrderLineList =
           purchaseOrderLinePerDateMap.get(estimatedDeliveryDate);
@@ -138,18 +130,7 @@ public class PurchaseOrderStockServiceImpl implements PurchaseOrderStockService 
         stockMoveIdList.addAll(stockMoveId);
       }
     }
-    Optional<List<PurchaseOrderLine>> purchaseOrderLineListDeliveryDateNull =
-        Optional.ofNullable(purchaseOrderLinePerDateMap.get(null));
-    if (purchaseOrderLineListDeliveryDateNull.isPresent()) {
 
-      List<Long> stockMoveId =
-          createStockMove(purchaseOrder, null, purchaseOrderLineListDeliveryDateNull.get());
-
-      if (stockMoveId != null && !stockMoveId.isEmpty()) {
-
-        stockMoveIdList.addAll(stockMoveId);
-      }
-    }
     return stockMoveIdList;
   }
 
@@ -262,7 +243,7 @@ public class PurchaseOrderStockServiceImpl implements PurchaseOrderStockService 
   protected Map<LocalDate, List<PurchaseOrderLine>> getAllPurchaseOrderLinePerDate(
       PurchaseOrder purchaseOrder) {
 
-    Map<LocalDate, List<PurchaseOrderLine>> purchaseOrderLinePerDateMap = new HashMap<>();
+    Map<LocalDate, List<PurchaseOrderLine>> purchaseOrderLinePerDateMap = new TreeMap<>();
 
     for (PurchaseOrderLine purchaseOrderLine : purchaseOrder.getPurchaseOrderLineList()) {
 
