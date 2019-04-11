@@ -2,10 +2,67 @@
 
 ## [Unreleased 5.1.6]
 ## Features
+- Menu entry for MetaPermission object in administration / User management.
+- TAX : Added typeSelect (Tax type) and filter in accounting reports
+- STOCK MOVE : tracking on invoice field
+- CUSTOM MENU : Display the menu only if one of the app linked to the object is installed.
+- DEBT RECOVERY : add color in debt recovery lines in grid view
+- DEBT RECOVERY : new button "Customer recovery" in partner form
+- SALE ORDER : Display invoicing panel tab when status >= finalized quotation
+- TAX : Added typeSelect (Tax type : on debit / on payment) and filter in both tax accounting reports
+- DEBT RECOVERY : add informations in Accounting Situation in partner form
+
 ## Improvements
+- CRM : Convert leads (change title and change the translation of title).
+- ManufOrder : Move automaticEmail fields to ProductionConfig
+- General Ledger & Partner General Ledger Printing : Display Journal in moveLine. 
+- DEBT RECOVERY : Hide validateDebtRecoveryBtn if waitDebtRecoveryMethodLine is null
+- DEBT RECOVERY : New translation of debtRecoveryMethod and debtRecoveryMethodLine
+- PURCHASE ORDER PRINTING : Change titles and add productStandard
+- DEBT RECOVERY : New title for fields debtRecoveryMethodLine and debtRecovery.accountingSituation.partner.
+- STOCK LOCATION : Add 'Totals per Product Family' in Report
+- DEBT RECOVERY : add color in debt recovery lines in grid view
+- DEBT RECOVERY : new button "Customer recovery" in partner form
+- SALE ORDER : Display invoicing panel tab when status >= finalized quotation
+- STOCK MOVE : added change tracking on invoice field
+- CUSTOM MENU : Display the menu only if one of the app linked to the object is installed.
+- Menu entry for MetaPermission object in administration / User management.
+- HR : Update kilometric Allowance demo data(fr and en).
+- INVOICE : printing error from grid view.
+- SaleOrder,PurchaseOrder,Invoice : automatically fill the contact if there is only one contact in contactPartnerSet of related partner.
+
 ## Bug Fixes
 - Project : FIX NPE due to duplicate existing project.
 - Account : fix reverse charge tax computation.
+- Contract : Specify type when generating the invoice.
+- Fixed Asset Acquisitions Report : Include Assets if no invoiceLine selected. 
+- Remove mapping between Product Family and Product Category.
+- Fix NPE when planning with tracking number.
+- Fix future qty computation.
+- Invoice : cannot cancel an advance payment invoice.
+- Direct Debits : Fix NPE when partner.activeUmr is null
+- Product: Cost sheet group is not displayed twice in form view
+- Stock Location : Added fr translation for two boolean fields
+- AccountConfig : Specify filters for accounts.
+- CURRENCY Conversion: Avoid creating line if conversion is not available. 
+- Sale order line : Fix delivered qty not increase if stock move is internal.
+- DEBT RECOVERY : don't add batch to model in case of anomalies
+- Sale : Fill clientPartner from contactPartner if clientPartner is null in SaleOrder.
+- DEBT RECOVERY : french translation of debt recovery settings
+- Sequence : Add sequence code select missing translation
+- Product : Remove BOM Value while copying.
+- STOCK MOVE : realDate should not fill when cancelling a planned move
+- MANUFORDER : Translate the "Outsourced" tag
+- TIMESHEET: Do not hide button to generate several lines.
+- TIMESHEET: Typo in name of two actions, rename 'generale' into 'generate'.
+- PARTNER : Fix can't change the address if partner is an employee.
+- DEBT RECOVERY : Fix unable to run debt recovery accounting batch.
+- EXPENSE : complete my expense (Error message when no expense is selected)
+- Purchase Order Line: fix delivery state update on splitted stock move lines.
+- Leave to justify : add a try catch to trace the exception with TraceBackService.
+- FIXED ASSETS : Issues with cents in depreciation tables
+- Sale order line: do not block on partial delivery with requested reserved quantity.
+- Stock Move : generate outgoing stock moves from a saleOrder/purchaseOrder with different products and different estimated shipment date according to its most recent estimated shipment date
 
 ## [5.1.5] - 2019-03-30
 ## Features
@@ -18,6 +75,7 @@
 - Sale Order Line: new button showing the future qty of the product.
 - Account : Display technicalOriginSelect as tag in Move form.
 - Account : Allow unlettering in ReconcileGroup object and fill unlettering date.
+- Stock Move : estimatedDate is editable in Draft and Planified status of stock move.
 
 ## Improvements
 - Data config : rename field 'Fields'
