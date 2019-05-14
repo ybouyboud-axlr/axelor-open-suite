@@ -33,10 +33,12 @@ import com.axelor.apps.stock.db.repo.StockMoveRepository;
 import com.axelor.apps.stock.service.StockLocationLineService;
 import com.axelor.apps.supplychain.db.SupplyChainConfig;
 import com.axelor.apps.supplychain.exception.IExceptionMessage;
+import com.axelor.apps.supplychain.service.app.AppSupplychainService;
 import com.axelor.apps.supplychain.service.config.SupplyChainConfigService;
 import com.axelor.exception.AxelorException;
 import com.axelor.exception.db.repo.TraceBackRepository;
 import com.axelor.i18n.I18n;
+import com.axelor.inject.Beans;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import java.math.BigDecimal;
@@ -67,17 +69,20 @@ public class ReservedQtyServiceImpl implements ReservedQtyService {
 
   @Override
   public void updateReservedQuantity(StockMove stockMove, int status) throws AxelorException {
-    if (status == StockMoveRepository.STATUS_REALIZED) {
-      consolidateReservedQtyInStockMoveLineByProduct(stockMove);
-    }
     List<StockMoveLine> stockMoveLineList = stockMove.getStockMoveLineList();
     if (stockMoveLineList != null) {
-      stockMove.getStockMoveLineList().sort(Comparator.comparing(StockMoveLine::getId));
+      // check quantities in stock move lines
       for (StockMoveLine stockMoveLine : stockMoveLineList) {
         if (status == StockMoveRepository.STATUS_PLANNED) {
           changeRequestedQtyLowerThanQty(stockMoveLine);
         }
         checkRequestedAndReservedQty(stockMoveLine);
+      }
+      if (status == StockMoveRepository.STATUS_REALIZED) {
+        consolidateReservedQtyInStockMoveLineByProduct(stockMove);
+      }
+      stockMove.getStockMoveLineList().sort(Comparator.comparing(StockMoveLine::getId));
+      for (StockMoveLine stockMoveLine : stockMoveLineList) {
         BigDecimal qty = stockMoveLine.getRealQty();
         BigDecimal requestedReservedQty = stockMoveLine.getRequestedReservedQty();
         Product product = stockMoveLine.getProduct();
@@ -387,10 +392,9 @@ public class ReservedQtyServiceImpl implements ReservedQtyService {
             .bind("stockLocationId", stockLocation.getId())
             .bind("productId", product.getId())
             .bind("planned", StockMoveRepository.STATUS_PLANNED)
+            .order("stockMove.reservationDateTime")
+            .order("stockMove.estimatedDate")
             .fetch();
-    stockMoveLineListToAllocate.sort(
-        Comparator.comparing(
-            stockMoveLine -> stockMoveLine.getStockMove().getReservationDateTime()));
     BigDecimal leftQtyToAllocate = qtyToAllocate;
     for (StockMoveLine stockMoveLine : stockMoveLineListToAllocate) {
       BigDecimal leftQtyToAllocateStockMove =
@@ -543,6 +547,11 @@ public class ReservedQtyServiceImpl implements ReservedQtyService {
     StockMoveLine stockMoveLine = getPlannedStockMoveLine(saleOrderLine);
 
     checkBeforeUpdatingQties(stockMoveLine, newReservedQty);
+    if (Beans.get(AppSupplychainService.class)
+        .getAppSupplychain()
+        .getBlockDeallocationOnAvailabilityRequest()) {
+      checkAvailabilityRequest(stockMoveLine, newReservedQty, false);
+    }
 
     // update requested reserved qty
     if (newReservedQty.compareTo(saleOrderLine.getRequestedReservedQty()) > 0) {
@@ -580,6 +589,11 @@ public class ReservedQtyServiceImpl implements ReservedQtyService {
     StockMoveLine stockMoveLine = getPlannedStockMoveLine(saleOrderLine);
 
     checkBeforeUpdatingQties(stockMoveLine, newReservedQty);
+    if (Beans.get(AppSupplychainService.class)
+        .getAppSupplychain()
+        .getBlockDeallocationOnAvailabilityRequest()) {
+      checkAvailabilityRequest(stockMoveLine, newReservedQty, true);
+    }
 
     BigDecimal diffReservedQuantity =
         newReservedQty.subtract(saleOrderLine.getRequestedReservedQty());
@@ -621,6 +635,28 @@ public class ReservedQtyServiceImpl implements ReservedQtyService {
       throw new AxelorException(
           TraceBackRepository.CATEGORY_INCONSISTENCY,
           I18n.get(IExceptionMessage.SALE_ORDER_LINE_RESERVATION_QTY_NEGATIVE));
+    }
+  }
+
+  /**
+   * If the stock move is planned and with an availability request, we cannot lower its quantity.
+   *
+   * @param stockMoveLine a stock move line.
+   * @param qty the quantity that can be requested or reserved.
+   * @param isRequested whether the quantity is requested or reserved.
+   * @throws AxelorException if we try to change the quantity of a stock move with availability
+   *     request equals to true.
+   */
+  protected void checkAvailabilityRequest(
+      StockMoveLine stockMoveLine, BigDecimal qty, boolean isRequested) throws AxelorException {
+    BigDecimal stockMoveLineQty =
+        isRequested ? stockMoveLine.getRequestedReservedQty() : stockMoveLine.getReservedQty();
+    if (stockMoveLine.getStockMove().getAvailabilityRequest()
+        && stockMoveLineQty.compareTo(qty) > 0) {
+      throw new AxelorException(
+          stockMoveLine.getStockMove(),
+          TraceBackRepository.CATEGORY_INCONSISTENCY,
+          I18n.get(IExceptionMessage.SALE_ORDER_LINE_AVAILABILITY_REQUEST));
     }
   }
 
