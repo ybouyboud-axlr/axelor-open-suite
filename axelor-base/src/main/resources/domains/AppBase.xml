@@ -73,6 +73,9 @@
         <integer name="limitNumberTasksGenerated" title="Number of tasks generated at most at once" min="1" default="100"/>
     
 		<boolean name="isSharedAddress" title="Shared address" default="false"/>
+
+	   	<many-to-one name="defaultMailMessageTemplate" title="Default mail message template" ref="com.axelor.apps.message.db.Template"/>
+	   	
 		<extra-code>
 	   		<![CDATA[
 	   			public static final int DISCOUNT_SEPARATE = 1;
