@@ -18,7 +18,12 @@
 package com.axelor.apps.production.db.repo;
 
 import com.axelor.apps.base.db.Product;
+import com.axelor.apps.base.service.ProductService;
+import com.axelor.apps.production.service.ProductProductionServiceImpl;
 import com.axelor.apps.stock.db.repo.ProductStockRepository;
+import com.axelor.exception.service.TraceBackService;
+import com.axelor.inject.Beans;
+
 import java.math.BigDecimal;
 
 public class ProductProductionRepository extends ProductStockRepository {
@@ -30,4 +35,18 @@ public class ProductProductionRepository extends ProductStockRepository {
     copy.setLastProductionPrice(BigDecimal.ZERO);
     return copy;
   }
+  
+  @Override
+	public Product save(Product product) {
+		Beans.get(ProductProductionServiceImpl.class).computeTradingNamesCostPrice(product, null);
+		 if (product.getAutoUpdateSalePrice()) {
+			 	try {
+		        Beans.get(ProductService.class).updateSalePrice(product, null);
+			 	}
+			 	catch(Exception e) {
+			 		TraceBackService.trace(e);
+			 	}
+		      }
+		return super.save(product);
+	}
 }
