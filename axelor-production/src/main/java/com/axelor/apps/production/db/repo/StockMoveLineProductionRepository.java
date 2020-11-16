@@ -17,8 +17,11 @@
  */
 package com.axelor.apps.production.db.repo;
 
+import com.axelor.apps.production.service.ProductProductionServiceImpl;
 import com.axelor.apps.stock.db.StockMoveLine;
 import com.axelor.apps.supplychain.db.repo.StockMoveLineSupplychainRepository;
+import com.axelor.exception.service.TraceBackService;
+import com.axelor.inject.Beans;
 
 public class StockMoveLineProductionRepository extends StockMoveLineSupplychainRepository {
 
@@ -31,5 +34,19 @@ public class StockMoveLineProductionRepository extends StockMoveLineSupplychainR
       copy.setConsumedOperationOrder(null);
     }
     return copy;
+  }
+
+  @Override
+  public StockMoveLine save(StockMoveLine stockMoveLine) {
+    stockMoveLine = super.save(stockMoveLine);
+    try {
+      Beans.get(ProductProductionServiceImpl.class)
+          .computeTradingNamesCostPrice(
+              stockMoveLine.getProduct(), stockMoveLine.getStockMove().getCompany());
+
+    } catch (Exception e) {
+      TraceBackService.trace(e);
+    }
+    return stockMoveLine;
   }
 }
