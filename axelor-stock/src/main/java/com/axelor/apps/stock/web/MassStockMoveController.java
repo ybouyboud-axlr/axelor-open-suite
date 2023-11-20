@@ -53,15 +53,14 @@ public class MassStockMoveController {
       MassStockMove massStockMove = request.getContext().asType(MassStockMove.class);
       massStockMove = Beans.get(MassStockMoveRepository.class).find(massStockMove.getId());
       int errors = Beans.get(MassStockMoveService.class).cancelPicking(massStockMove);
-
-      massStockMove = Beans.get(MassStockMoveRepository.class).find(massStockMove.getId());
-      Beans.get(MassStockMoveService.class).setStatusSelectToDraft(massStockMove);
-      response.setReload(true);
       if (errors > 0) {
         throw new AxelorException(
             TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
             I18n.get(StockExceptionMessage.MASS_STOCK_MOVE_LINE_ALREADY_STORED));
       }
+      massStockMove = Beans.get(MassStockMoveRepository.class).find(massStockMove.getId());
+      Beans.get(MassStockMoveService.class).setStatusSelectToDraft(massStockMove);
+      response.setReload(true);
     } catch (Exception e) {
       TraceBackService.trace(response, e);
     }
