@@ -129,7 +129,8 @@ public class MassStockMoveServiceImpl implements MassStockMoveService {
     }
     for (StockLocationLine line : stockLocationLineList) {
       if (line.getProduct().getTrackingNumberConfiguration() == null
-          && line.getCurrentQty().compareTo(BigDecimal.ZERO) == 1) {
+          && line.getCurrentQty().compareTo(BigDecimal.ZERO) == 1
+          && !isProductInList(line, massStockMove)) {
         PickedProduct pickedProduct =
             pickedProductService.createPickedProduct(
                 massStockMove,
@@ -146,7 +147,8 @@ public class MassStockMoveServiceImpl implements MassStockMoveService {
     for (StockLocationLine line : detailsStockLocationLineList) {
       if (line.getCurrentQty().compareTo(BigDecimal.ZERO) == 1
           && line.getProduct() != null
-          && line.getProduct().getTrackingNumberConfiguration() != null) {
+          && line.getProduct().getTrackingNumberConfiguration() != null
+          && !isProductInList(line, massStockMove)) {
         PickedProduct pickedProduct =
             pickedProductService.createPickedProduct(
                 massStockMove,
@@ -189,5 +191,19 @@ public class MassStockMoveServiceImpl implements MassStockMoveService {
           company.getName());
     }
     return sequence;
+  }
+
+  private boolean isProductInList(StockLocationLine line, MassStockMove massStockMove) {
+    if (line.getTrackingNumber() == null) {
+      return massStockMove.getPickedProductList().stream()
+          .anyMatch(
+              pickedProduct ->
+                  line.getProduct().getId().equals(pickedProduct.getPickedProduct().getId()));
+    }
+    return massStockMove.getPickedProductList().stream()
+        .anyMatch(
+            pickedProduct ->
+                line.getProduct().getId().equals(pickedProduct.getPickedProduct().getId())
+                    && line.getTrackingNumber().equals(pickedProduct.getTrackingNumber()));
   }
 }
