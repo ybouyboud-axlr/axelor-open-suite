@@ -54,7 +54,21 @@
 
     <integer name="standardDelay" title="Standard delay (days)" default="0"/>
 
+    <one-to-many name="productReservationList"
+      ref="com.axelor.apps.supplychain.db.ProductReservation" title="Product reservations"
+      mappedBy="originSaleOrderLine"/>
 
+    <string name="originSaleOrderLineName">
+     <![CDATA[
+     String originSaleOrderLineName = "";
+     if(saleOrder != null){
+     originSaleOrderLineName += saleOrder.getSaleOrderSeq();
+     originSaleOrderLineName += "-";
+     originSaleOrderLineName += sequence;
+     }
+     return originSaleOrderLineName;
+     ]]>
+    </string>
 
     <extra-code>
   		<![CDATA[
@@ -80,7 +94,6 @@
 			public static final int STATUS_MISSING = 2;
 	  	]]>
     </extra-code>
-
 
     <track on="UPDATE">
       <field name="requestedReservedQty"/>
